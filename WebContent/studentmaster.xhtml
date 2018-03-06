@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+xmlns:f="http://java.sun.com/jsf/core"
+xmlns:h="http://java.sun.com/jsf/html"
+xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+<title>JSF Spring  Student Example</title>
+</h:head>
+<h:body> 
+    <h:form>
+     <p:panel id="panel" header="Student" style="margin-bottom:10px;">
+        
+        <h:panelGrid columns="2" cellpadding="8">     
+	        <h:outputLabel>Name</h:outputLabel>
+	        <p:inputText value="#{studentMasterBean.srcName}"></p:inputText>
+	        <h:outputLabel> Surname</h:outputLabel>
+	        <p:inputText value="#{studentMasterBean.srcSurname}"></p:inputText>    
+		</h:panelGrid>
+		  
+		 <p:commandButton value="Add " update="selectedStudentId" type="button" onclick="PF('sv1').show();" />
+         <p:commandButton value="Update " update="selectedStudentId" id="update"  actionListener="#{studentMasterBean.updateStudent}" styleClass="ui-priority-primary" />
+         <p:commandButton value="Delete " update="selectedStudentId" id="delete"  actionListener="#{studentMasterBean.deleteStudent()}" styleClass="ui-priority-primary" />
+		 <p:commandButton value="Search" update="selectedStudentId" id="search"  actionListener="#{studentMasterBean.getSearchStudentList()}" styleClass="ui-priority-primary" />	
+		
+		<p:dataTable id="selectedStudentId"  var="students"    selectionMode="single"  scrollable="true"  value="#{studentMasterBean.getSearchStudentList()}" border="1">
+			<p:column headerText="Id"><h:outputText value="#{students.studentId}" /></p:column>
+		     <p:column><f:facet name="header">Name</f:facet><h:outputText value="#{students.name}" />   </p:column>
+   			 <p:column><f:facet name="header">Surname</f:facet><h:outputText value="#{students.surname}" /></p:column>
+  			 <p:column><f:facet name="header">Mobil Phone</f:facet><h:outputText value="#{students.mobilePhone}" /></p:column>
+   			 <p:column><f:facet name="header">City</f:facet><h:outputText value="#{students.cityName}" /></p:column>
+   			 <p:column><f:facet name="header">District</f:facet><h:outputText value="#{students.districtName}" /></p:column>
+   			 <p:column><f:facet name="header">Description</f:facet><h:outputText value="#{students.description}" /></p:column>
+ 		 </p:dataTable>   
+			<p:dialog header="Save Student" widgetVar="sv1" modal="true" height="300">
+			    <h:panelGrid columns="4" cellpadding="8">     
+			      
+			     <h:outputLabel>Name</h:outputLabel>
+			        <p:inputText value="#{studentMasterBean.name}"></p:inputText>
+			        
+			        <h:outputLabel> Surname</h:outputLabel>
+			        <p:inputText value="#{studentMasterBean.surname}"></p:inputText>    
+			           
+			        <h:outputLabel>Mobil Phone</h:outputLabel>
+			        <p:inputMask id="phone" value="#{studentMasterBean.mobilePhone}" mask="(999) 999-99-99"/>  
+			         
+			        <h:outputLabel>City</h:outputLabel> 			        
+			        <p:selectOneMenu  id="selectionCityId" value="#{studentMasterBean.selectionCityId}"  style="width:225px;margin-bottom:20px">   
+						<p:ajax event="change"  listener="#{studentMasterBean.districtList}" update="selectionDistrictId" />
+						<f:selectItem itemLabel="Select City" itemValue="" noSelectionOption="true" />
+						<f:selectItems value="#{studentMasterBean.cityList}" var="City" itemLabel="#{City.cityName}" itemValue="#{City.cityId}"   />
+				    </p:selectOneMenu>     
+				    
+				    <h:outputLabel>Description</h:outputLabel>    
+					<p:inputTextarea  value="#{studentMasterBean.description}" queryDelay="750" minQueryLength="4" />
+								         
+					<h:outputLabel>District</h:outputLabel>					
+						<p:selectOneMenu id="selectionDistrictId" value="#{studentMasterBean.selectionDistrictId}" style="width:225px">
+						<f:selectItem itemLabel="Select District" itemValue="" noSelectionOption="true" />
+						<f:selectItems value="#{studentMasterBean.districtList}" var="District" itemLabel="#{District.districtName}" itemValue="#{District.districtId}"   />
+					</p:selectOneMenu>  
+					
+			         </h:panelGrid>
+			         <p:commandButton value="Save" id="save" actionListener="#{studentMasterBean.addStudent}" styleClass="ui-priority-primary" />
+			        </p:dialog>   
+  </p:panel> 
+</h:form>
+</h:body>
+</html>
